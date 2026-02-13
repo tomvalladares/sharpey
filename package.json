@@ -1,0 +1,21 @@
+{
+  "name": "sharpey",
+  "version": "1.0.0",
+  "description": "Generate responsive image sets optimized for LCP",
+  "type": "module",
+  "bin": {
+    "sharpey": "./bin/sharpey.js"
+  },
+  "main": "./src/index.js",
+  "engines": {
+    "node": ">=18.17.0"
+  },
+  "dependencies": {
+    "blurhash": "^2.0.0",
+    "chalk": "^5.3.0",
+    "commander": "^12.0.0",
+    "ora": "^8.0.0",
+    "p-map": "^7.0.0",
+    "sharp": "^0.33.0"
+  }
+}
