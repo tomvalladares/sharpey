@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sharpey Catalog</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 2rem;
+    }
+    h1 { font-size: 1.5rem; margin-bottom: 0.25rem; color: #f8fafc; }
+    .subtitle { color: #94a3b8; margin-bottom: 2rem; font-size: 0.875rem; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(800px, 1fr));
+      gap: 1.5rem;
+    }
+    .card {
+      background: #1e293b;
+      border-radius: 8px;
+      padding: 1.5rem;
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 1rem;
+    }
+    .card-header h2 {
+      font-size: 1rem;
+      color: #f8fafc;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+    }
+    .card-meta {
+      color: #64748b;
+      font-size: 0.75rem;
+    }
+    .compare {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+    .compare-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .compare-label {
+      color: #94a3b8;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+    .compare-frame {
+      width: 100%;
+      aspect-ratio: var(--aspect);
+      border-radius: 6px;
+      overflow: hidden;
+      background: #0f172a;
+    }
+    .compare-frame img,
+    .compare-frame canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+    .compare-frame .lqip {
+      image-rendering: auto;
+    }
+    .compare-size {
+      color: #475569;
+      font-size: 0.65rem;
+      margin-top: 0.35rem;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+    }
+  </style>
+</head>
+<body>
+  <h1>Sharpey Catalog</h1>
+  <p class="subtitle">3 images | 320, 640, 1024, 1920px | avif, webp, jpeg</p>
+  <div class="grid">
+    <div class="card">
+      <div class="card-header">
+        <h2>arch</h2>
+        <span class="card-meta">3577&times;5366 &middot; 12 variants &middot; 2.1 MB</span>
+      </div>
+      <div class="compare">
+      <div class="compare-item">
+        <span class="compare-label">LQIP</span>
+        <div class="compare-frame" style="--aspect: 0.6666">
+          <img class="lqip" src="data:image/webp;base64,UklGRkAAAABXRUJQVlA4IDQAAACwAQCdASoLABAABUB8JbACdADa2WHQAPnYTMr86F//2+3wj4GEzc5dWWCy4x69dNUgiZAA" alt="">
+        </div>
+        <span class="compare-size">~72 B inline</span>
+      </div>
+      <div class="compare-item">
+        <span class="compare-label">BlurHash</span>
+        <div class="compare-frame" style="--aspect: 0.6666">
+          <canvas data-bh="LPBOUH_NX9JC7iE2RitRnNt6w[s," data-bh-w="3577" data-bh-h="5366"></canvas>
+        </div>
+        <span class="compare-size">28 chars</span>
+      </div>
+      <div class="compare-item">
+        <span class="compare-label">Picture</span>
+        <div class="compare-frame" style="--aspect: 0.6666">
+          <img src="arch-320.jpg" alt="">
+        </div>
+        <span class="compare-size">arch-320.jpg</span>
+      </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <h2>biennale</h2>
+        <span class="card-meta">3543&times;2901 &middot; 12 variants &middot; 4.0 MB</span>
+      </div>
+      <div class="compare">
+      <div class="compare-item">
+        <span class="compare-label">LQIP</span>
+        <div class="compare-frame" style="--aspect: 1.2213">
+          <img class="lqip" src="data:image/webp;base64,UklGRk4AAABXRUJQVlA4IEIAAACwAQCdASoQAA0ABUB8JYwAAfYPKqAAAPffQkqCD6TbjXZPYh8rsrNValGNq4avW7CF8GuPCNADEgbgYZ8lyQIIAAA=" alt="">
+        </div>
+        <span class="compare-size">~87 B inline</span>
+      </div>
+      <div class="compare-item">
+        <span class="compare-label">BlurHash</span>
+        <div class="compare-frame" style="--aspect: 1.2213">
+          <canvas data-bh="LXHen7NFE1sm_4ozozM{~Xx[tQM{" data-bh-w="3543" data-bh-h="2901"></canvas>
+        </div>
+        <span class="compare-size">28 chars</span>
+      </div>
+      <div class="compare-item">
+        <span class="compare-label">Picture</span>
+        <div class="compare-frame" style="--aspect: 1.2213">
+          <img src="biennale-320.jpg" alt="">
+        </div>
+        <span class="compare-size">biennale-320.jpg</span>
+      </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <h2>chile</h2>
+        <span class="card-meta">1080&times;1390 &middot; 9 variants &middot; 415.9 KB</span>
+      </div>
+      <div class="compare">
+      <div class="compare-item">
+        <span class="compare-label">LQIP</span>
+        <div class="compare-frame" style="--aspect: 0.7770">
+          <img class="lqip" src="data:image/webp;base64,UklGRkoAAABXRUJQVlA4ID4AAAAQAgCdASoMABAABUB8JaACdAELgABIoOIAAP40cm9H1MB6b0HrPy3ZQ5SdK82regrXokx0an3Ku3vfkz/AAA==" alt="">
+        </div>
+        <span class="compare-size">~84 B inline</span>
+      </div>
+      <div class="compare-item">
+        <span class="compare-label">BlurHash</span>
+        <div class="compare-frame" style="--aspect: 0.7770">
+          <canvas data-bh="LVAwxi9F.9Rk%jf6o#kDM|%MRPt7" data-bh-w="1080" data-bh-h="1390"></canvas>
+        </div>
+        <span class="compare-size">28 chars</span>
+      </div>
+      <div class="compare-item">
+        <span class="compare-label">Picture</span>
+        <div class="compare-frame" style="--aspect: 0.7770">
+          <img src="chile-320.jpg" alt="">
+        </div>
+        <span class="compare-size">chile-320.jpg</span>
+      </div>
+      </div>
+    </div>
+  </div>
+<script>
+(function(){
+  var C="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz#$%*+,-.:;=?@[]^_{|}~";
+  function d83(s){var v=0;for(var i=0;i<s.length;i++)v=v*83+C.indexOf(s[i]);return v}
+  function sL(v){v/=255;return v<=.04045?v/12.92:Math.pow((v+.055)/1.055,2.4)}
+  function lS(v){v=Math.max(0,Math.min(1,v));return v<=.0031308?Math.round(v*12.92*255+.5):Math.round((1.055*Math.pow(v,1/2.4)-.055)*255+.5)}
+  function sP(v,e){return(v<0?-1:1)*Math.pow(Math.abs(v),e)}
+  function dDC(v){return[sL(v>>16),sL((v>>8)&255),sL(v&255)]}
+  function dAC(v,m){var r=Math.floor(v/361),g=Math.floor(v/19)%19,b=v%19;return[sP((r-9)/9,2)*m,sP((g-9)/9,2)*m,sP((b-9)/9,2)*m]}
+  function decode(hash,w,h){
+    var sf=d83(hash[0]),ny=Math.floor(sf/9)+1,nx=(sf%9)+1;
+    var m=(d83(hash[1])+1)/166,colors=[dDC(d83(hash.substring(2,6)))];
+    for(var i=1;i<nx*ny;i++)colors.push(dAC(d83(hash.substring(4+i*2,6+i*2)),m));
+    var px=new Uint8ClampedArray(w*h*4);
+    for(var y=0;y<h;y++)for(var x=0;x<w;x++){
+      var r=0,g=0,b=0;
+      for(var j=0;j<ny;j++)for(var i=0;i<nx;i++){
+        var basis=Math.cos(Math.PI*x*i/w)*Math.cos(Math.PI*y*j/h);
+        var c=colors[i+j*nx];r+=c[0]*basis;g+=c[1]*basis;b+=c[2]*basis;
+      }
+      var idx=4*(x+y*w);px[idx]=lS(r);px[idx+1]=lS(g);px[idx+2]=lS(b);px[idx+3]=255;
+    }
+    return px;
+  }
+  document.querySelectorAll("canvas[data-bh]").forEach(function(el){
+    var hash=el.getAttribute("data-bh");
+    var ow=+el.getAttribute("data-bh-w"),oh=+el.getAttribute("data-bh-h");
+    var pw=Math.min(64,ow),ph=Math.round(pw*oh/ow);
+    el.width=pw;el.height=ph;
+    try{
+      var px=decode(hash,pw,ph);
+      var ctx=el.getContext("2d");
+      var img=ctx.createImageData(pw,ph);
+      img.data.set(px);ctx.putImageData(img,0,0);
+    }catch(e){console.error("BH error:",e)}
+  });
+})();
+</script>
+</body>
+</html>

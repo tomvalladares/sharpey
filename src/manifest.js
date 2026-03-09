@@ -1,6 +1,5 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { getMimeType } from './utils.js';
 
 export async function generateManifest(results, config, outputDir) {
   const manifest = {};
@@ -10,34 +9,16 @@ export async function generateManifest(results, config, outputDir) {
 
     const { stem, originalWidth, originalHeight, variants, lqip } = result;
 
-    const srcset = {};
-    for (const format of config.formats) {
-      srcset[format] = variants
-        .filter(v => v.format === format)
-        .sort((a, b) => a.width - b.width)
-        .map(v => `${v.filename} ${v.width}w`)
-        .join(', ');
-    }
-
-    const sorted = [...config.sizes].sort((a, b) => a - b);
-    const parts = sorted.slice(0, -1).map(s => `(max-width: ${s}px) 100vw`);
-    parts.push(`${sorted[sorted.length - 1]}px`);
-    const sizes = parts.join(', ');
-
-    const jpegVariants = variants.filter(v => v.format === 'jpeg');
-    const fallbackFormat = jpegVariants.length > 0 ? 'jpeg' : config.formats[config.formats.length - 1];
-    const fallbackVariants = variants.filter(v => v.format === fallbackFormat);
-    const src = fallbackVariants.sort((a, b) => b.width - a.width)[0]?.filename || '';
+    const widths = [...new Set(variants.map(v => v.width))].sort((a, b) => a - b);
 
     manifest[stem] = {
+      name: stem,
       width: originalWidth,
       height: originalHeight,
       lqip: lqip?.base64DataUri || null,
       blurhash: lqip?.blurhash?.hash || null,
-      src,
-      srcset,
-      sizes,
-      formats: config.formats.map(f => ({ format: f, mime: getMimeType(f) })),
+      widths,
+      formats: config.formats,
     };
   }
 

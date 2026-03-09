@@ -1,0 +1,55 @@
+{
+  "arch": {
+    "name": "arch",
+    "width": 3577,
+    "height": 5366,
+    "lqip": "data:image/webp;base64,UklGRkAAAABXRUJQVlA4IDQAAACwAQCdASoLABAABUB8JbACdADa2WHQAPnYTMr86F//2+3wj4GEzc5dWWCy4x69dNUgiZAA",
+    "blurhash": "LPBOUH_NX9JC7iE2RitRnNt6w[s,",
+    "widths": [
+      320,
+      640,
+      1024,
+      1920
+    ],
+    "formats": [
+      "avif",
+      "webp",
+      "jpeg"
+    ]
+  },
+  "biennale": {
+    "name": "biennale",
+    "width": 3543,
+    "height": 2901,
+    "lqip": "data:image/webp;base64,UklGRk4AAABXRUJQVlA4IEIAAACwAQCdASoQAA0ABUB8JYwAAfYPKqAAAPffQkqCD6TbjXZPYh8rsrNValGNq4avW7CF8GuPCNADEgbgYZ8lyQIIAAA=",
+    "blurhash": "LXHen7NFE1sm_4ozozM{~Xx[tQM{",
+    "widths": [
+      320,
+      640,
+      1024,
+      1920
+    ],
+    "formats": [
+      "avif",
+      "webp",
+      "jpeg"
+    ]
+  },
+  "chile": {
+    "name": "chile",
+    "width": 1080,
+    "height": 1390,
+    "lqip": "data:image/webp;base64,UklGRkoAAABXRUJQVlA4ID4AAAAQAgCdASoMABAABUB8JaACdAELgABIoOIAAP40cm9H1MB6b0HrPy3ZQ5SdK82regrXokx0an3Ku3vfkz/AAA==",
+    "blurhash": "LVAwxi9F.9Rk%jf6o#kDM|%MRPt7",
+    "widths": [
+      320,
+      640,
+      1024
+    ],
+    "formats": [
+      "avif",
+      "webp",
+      "jpeg"
+    ]
+  }
+}

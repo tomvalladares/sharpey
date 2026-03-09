@@ -13,15 +13,13 @@ export async function generateReport(results, config, outputDir) {
 
 ## Setup
 
-Import the manifest in your Vue component:
+1. Copy \`sharpey-manifest.json\` to your project (e.g. \`src/assets/\`)
+2. Copy \`ImgLazy.vue\` to your components directory
+3. Set \`VITE_SHARPEY_BASE_PATH\` in your \`.env\` to the public URL where images are served
 
-\`\`\`vue
-<script setup>
-import manifest from '@/assets/sharpey-manifest.json'
-</script>
+\`\`\`env
+VITE_SHARPEY_BASE_PATH=/images/
 \`\`\`
-
-> Adjust the import path to where you place \`sharpey-manifest.json\` in your project.
 
 ---
 
@@ -37,15 +35,11 @@ function buildImageSection(result, config) {
   const { stem, originalWidth, originalHeight, validSizes, skippedSizes, variants, lqip } = result;
 
   const totalSize = variants.reduce((s, v) => s + v.size, 0);
+  const widths = [...new Set(variants.map(v => v.width))].sort((a, b) => a - b);
 
   const skippedNote = skippedSizes.length > 0
     ? `\n> Skipped sizes (larger than source): ${skippedSizes.join(', ')}\n`
     : '';
-
-  const preloadSnippet = buildPreloadSnippet(stem, config);
-  const pictureSnippet = buildPictureSnippet(stem, config);
-
-  const backgroundSnippet = buildBackgroundSnippet(stem, validSizes, config);
 
   return `## \`${stem}\`
 
@@ -53,117 +47,90 @@ Original: ${originalWidth}x${originalHeight} | Variants: ${variants.length} | To
 ${skippedNote}
 ### Preload hint (\`<head>\`)
 
-\`\`\`vue
-${preloadSnippet}
+\`\`\`html
+${buildPreloadSnippet(stem, widths, config)}
 \`\`\`
 
-### Picture element
+### ImgLazy component (recommended)
 
 \`\`\`vue
-${pictureSnippet}
+${buildComponentSnippet(stem)}
+\`\`\`
+
+### Raw picture element
+
+\`\`\`html
+${buildPictureSnippet(stem, widths, config)}
 \`\`\`
 
 ### Background CSS
 
 \`\`\`css
-${backgroundSnippet}
-\`\`\`
-
-### Reusable component
-
-\`\`\`vue
-${buildComponentSnippet(stem, config)}
+${buildBackgroundSnippet(stem, validSizes, config)}
 \`\`\`
 
 ---
 `;
 }
 
-function buildPreloadSnippet(stem, config) {
+function buildPreloadSnippet(stem, widths, config) {
   const bestFormat = config.formats[0];
   const mime = getMimeType(bestFormat);
+  const ext = bestFormat === 'jpeg' ? 'jpg' : bestFormat;
+  const srcset = widths.map(w => `${stem}-${w}.${ext} ${w}w`).join(', ');
 
   return `<link
   rel="preload"
   as="image"
   type="${mime}"
-  :imagesrcset="manifest.${stem}.srcset.${bestFormat}"
-  :imagesizes="manifest.${stem}.sizes"
+  imagesrcset="${srcset}"
   fetchpriority="high"
 >`;
 }
 
-function buildPictureSnippet(stem, config) {
-  const sources = config.formats
-    .filter(f => f !== 'jpeg')
-    .map(f => {
-      const mime = getMimeType(f);
-      return `  <source
-    type="${mime}"
-    :srcset="manifest.${stem}.srcset.${f}"
-    :sizes="manifest.${stem}.sizes"
-  >`;
-    })
-    .join('\n');
+function buildPictureSnippet(stem, widths, config) {
+  const EXT_MAP = { avif: 'avif', webp: 'webp', jpeg: 'jpg' };
+  const modernFormats = config.formats.slice(0, -1);
+  const fallbackFormat = config.formats.at(-1);
+  const fallbackExt = EXT_MAP[fallbackFormat] ?? fallbackFormat;
+  const fallbackSrcset = widths.map(w => `${stem}-${w}.${fallbackExt} ${w}w`).join(', ');
+  const fallbackSrc = `${stem}-${widths.at(-1)}.${fallbackExt}`;
 
-  const fallbackFormat = config.formats.includes('jpeg')
-    ? 'jpeg'
-    : config.formats[config.formats.length - 1];
+  const sources = modernFormats.map(f => {
+    const mime = getMimeType(f);
+    const ext = EXT_MAP[f] ?? f;
+    const srcset = widths.map(w => `${stem}-${w}.${ext} ${w}w`).join(', ');
+    return `  <source type="${mime}" srcset="${srcset}">`;
+  }).join('\n');
 
   return `<picture>
 ${sources}
   <img
-    :src="manifest.${stem}.src"
-    :srcset="manifest.${stem}.srcset.${fallbackFormat}"
-    :sizes="manifest.${stem}.sizes"
-    :width="manifest.${stem}.width"
-    :height="manifest.${stem}.height"
-    :style="{ backgroundImage: \`url(\${manifest.${stem}.lqip})\`, backgroundSize: 'cover' }"
-    :data-blurhash="manifest.${stem}.blurhash"
-    alt=""
+    src="${fallbackSrc}"
+    srcset="${fallbackSrcset}"
+    width="${'/* originalWidth */'}"
+    height="${'/* originalHeight */'}"
     loading="eager"
     decoding="async"
     fetchpriority="high"
+    alt=""
   >
 </picture>`;
 }
 
-function buildComponentSnippet(stem, config) {
-  const fallbackFormat = config.formats.includes('jpeg')
-    ? 'jpeg'
-    : config.formats[config.formats.length - 1];
-
-  const sources = config.formats
-    .filter(f => f !== 'jpeg')
-    .map(f => {
-      const mime = getMimeType(f);
-      return `    <source type="${mime}" :srcset="img.srcset.${f}" :sizes="img.sizes">`;
-    })
-    .join('\n');
-
+function buildComponentSnippet(stem) {
   return `<script setup>
 import manifest from '@/assets/sharpey-manifest.json'
-
-const img = manifest.${stem}
+import ImgLazy from '@/components/ImgLazy.vue'
 </script>
 
 <template>
-  <picture>
-${sources}
-    <img
-      :src="img.src"
-      :srcset="img.srcset.${fallbackFormat}"
-      :sizes="img.sizes"
-      :width="img.width"
-      :height="img.height"
-      :style="{ backgroundImage: \`url(\${img.lqip})\`, backgroundSize: 'cover' }"
-      :data-blurhash="img.blurhash"
-      alt=""
-      loading="eager"
-      decoding="async"
-      fetchpriority="high"
-    >
-  </picture>
+  <!-- loading="eager" for LCP hero images, "lazy" for below-the-fold -->
+  <ImgLazy
+    :image="manifest.${stem}"
+    loading="eager"
+    alt=""
+  />
 </template>`;
 }
 
@@ -182,9 +149,8 @@ function buildBackgroundSnippet(stem, validSizes, config) {
 
   const blocks = [];
 
-  // Base (smallest)
   const smallest = sorted[0];
-  const smallExt = formats.includes('jpeg') ? 'jpg' : (formats[formats.length - 1] === 'jpeg' ? 'jpg' : formats[formats.length - 1]);
+  const smallExt = formats.includes('jpeg') ? 'jpg' : formats[formats.length - 1];
   blocks.push(`.bg-${stem} {
   background-size: cover;
   background-position: center;
@@ -193,11 +159,10 @@ function buildBackgroundSnippet(stem, validSizes, config) {
   background-image: ${imageSetForWidth(smallest)};
 }`);
 
-  // Media queries for larger sizes
   for (let i = 1; i < sorted.length; i++) {
     const width = sorted[i];
     const breakpoint = sorted[i - 1] + 1;
-    const ext = formats.includes('jpeg') ? 'jpg' : (formats[formats.length - 1] === 'jpeg' ? 'jpg' : formats[formats.length - 1]);
+    const ext = formats.includes('jpeg') ? 'jpg' : formats[formats.length - 1];
     blocks.push(`@media (min-width: ${breakpoint}px) {
   .bg-${stem} {
     background-image: url('${stem}-${width}.${ext}');
